@@ -1,0 +1,7 @@
+*.vscode/
+/build/*
+!/build/.gitkeep
+/Results/*
+!/Results/.gitkeep
+!/Results/visualizer.html
+*__pycache__/
