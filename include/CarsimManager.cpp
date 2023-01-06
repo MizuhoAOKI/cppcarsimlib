@@ -40,7 +40,7 @@ int CarsimManager::LaunchCarsimSolver()
     }
 
     // set output_message pointer. refer carsim msg by "sPringMsg()"
-    sMsg_ = api_->vs_get_output_message();
+    carsim_msg_ = api_->vs_get_output_message();
 
     return 0;
 }
@@ -56,23 +56,23 @@ int CarsimManager::OpenDLL()
 	// get simfile from argument list and load DLL
 	if (api_->vs_get_dll_path(simfile_path_.c_str(), _pathDLL)) return 1;
 
-	// CarsimBasic
+	// load dll
 	std::cout << "       pathDLL = " << _pathDLL << std::endl;
 	vsDLL_ = api_->vs_load_library(_pathDLL);
     if (vsDLL_ == NULL)
     {
-    printf("[ERROR] vs_load_library failed. \n");
+    std::cout << "[ERROR] vs_load_library failed. " << std::endl;
     return 1;
     }else{
-        printf("       vs_load_library successful. \n");
+        std::cout << "       vs_load_library successful. " << std::endl;
     }
 
     // get API functions
 	if (api_->vs_get_api(vsDLL_, _pathDLL)){
-		printf("[ERROR] vs_get_api failed. \n");
+        std::cout << "[ERROR] vs_get_api failed. " << std::endl;
 		return 1;
 	}else{
-		printf("       vs_get_api successful. \n");
+        std::cout << "       vs_get_api successful. " << std::endl;
         return 0;
 	}
 }
@@ -96,13 +96,6 @@ void CarsimManager::ReleaseDLL()
 void CarsimManager::DefineCarsimControlInput(std::map<std::string, vs_real> carsim_input)
 {
     std::cout << "[INFO] DefineCarsimControlInput" << std::endl;
-
-    // api_->vs_statement("DEFINE_UNITS", "deg/m DR", 1); // TODO 
-
-    // api_->vs_statement("IMP_STEER_SW", "VS_REPLACE", 3.0); // TODO : kentou
-    // std::cout << "[DEBUG] " << const_cast<char*>("IMP_STEER_SW") << std::endl;
-    // debug_steer_input = api_->vs_get_var_ptr(const_cast<char*>("IMP_STEER_SW"));
-    // api_->vs_statement("IMPORT", "IMP_STEER_SW vs_replace", 1);
 
     for (auto iter = carsim_input.begin(); iter != carsim_input.end(); ++iter){
         char *_buf = new char[(iter->first).length() + 1];
@@ -129,31 +122,28 @@ void CarsimManager::DefineCarsimStateOutput(std::vector<std::string> carsim_outp
 // set next control action to carsim
 void CarsimManager::SetCarsimControlInput(std::map<std::string, vs_real> carsim_input)
 {
-    std::cout << "[INFO] SetCarsimControlInput" << std::endl;
+    // std::cout << "[INFO] SetCarsimControlInput" << std::endl;
 
     for (auto iter = carsim_input.begin(); iter != carsim_input.end(); ++iter){
         *input_variable_map_[iter->first] = iter->second;
-        std::cout << "       " << iter->first << "=" << iter->second << std::endl;
     }
-
 }
 
 // get carsim state
 std::map<std::string, vs_real> CarsimManager::GetCarsimStateOutput()
 {
-    std::cout << "[INFO] GetCarsimStateOutput" << std::endl;
+    // std::cout << "[INFO] GetCarsimStateOutput" << std::endl;
     std::map<std::string, vs_real> _latest_carsim_output;
 
-    // debug print : map key and values
+    // get observed variables
     for( auto i = output_variable_map_.begin(); i != output_variable_map_.end() ; ++i ) {
-        std::cout << "       " << i->first << " " << *i->second << "\n";
         _latest_carsim_output[i->first] = *i->second;
     }
 
     return _latest_carsim_output;
 }
 
-// Reset carsim time
+// reset carsim time
 int CarsimManager::Reset()
 {
     std::cout << "[INFO] Reset" << std::endl;
@@ -170,7 +160,7 @@ int CarsimManager::Reset()
     carsim_tstep_ = api_->vs_get_tstep(); // [sec]
 
     // print carsim messages
-    sPrintMsg();
+    PrintCarsimMsg();
 
     return 0;
 }
@@ -212,16 +202,24 @@ int CarsimManager::IsRunning()
 // echo time and carsim inputs/states
 void CarsimManager::EchoInfo(){
     std::cout << "[INFO] ### t = " << carsim_time_ << " [sec]" << std::endl;
+    std::cout << "       Control Inputs : " << std::endl;
+    for( auto i = input_variable_map_.begin(); i != input_variable_map_.end() ; ++i ) {
+        std::cout << "         " << i->first << " " << *i->second << "\n";
+    }
+    std::cout << "       Observations : " << std::endl;
+    for( auto j = output_variable_map_.begin(); j != output_variable_map_.end() ; ++j ) {
+        std::cout << "         " << j->first << " " << *j->second << "\n";
+    }
 }
 
 // echo carsim message
-void CarsimManager::sPrintMsg () {
-    // std::cout << "[INFO] sPrintMsg" << std::endl;
+void CarsimManager::PrintCarsimMsg () {
+    // std::cout << "[INFO] PrintCarsimMsg" << std::endl;
 
     // exit if no valid message is given.
-    if (!*sMsg_){return;} 
+    if (!*carsim_msg_){return;} 
 
     // print carsim msg
-    std::cout << "[INFO] [CarsimMsg]" << std::endl << std::endl << sMsg_ << std::endl;
-    *sMsg_ = 0;
+    std::cout << "[INFO] [CarsimMsg]" << std::endl << std::endl << carsim_msg_ << std::endl;
+    *carsim_msg_ = 0;
 }

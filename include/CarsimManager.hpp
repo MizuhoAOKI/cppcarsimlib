@@ -26,15 +26,11 @@ Class to launch, run, update states, and close carsim solver.
 		std::map<std::string, vs_real*> output_variable_map_;
 
 		int ibarg_ = 0;
-		char *sMsg_ = 0; // pointer to support local sPringMsg function
+		char *carsim_msg_ = 0; // pointer to support local sPringMsg function
 		vs_real carsim_time_ = 0.0f; // [sec]
 		vs_real carsim_tstep_ = 0.0f; // [sec]
 
 	public:
-
-		// for debug
-		double* debug_steer_input;
-
 		// constructor
 		CarsimManager(std::string fn);
 		// destructor
@@ -69,7 +65,7 @@ Class to launch, run, update states, and close carsim solver.
 
 		// echo time and carsim inputs/states
 		void EchoInfo();
-
-		void sPrintMsg();
+		// print message from carsim
+		void PrintCarsimMsg();
 
 };

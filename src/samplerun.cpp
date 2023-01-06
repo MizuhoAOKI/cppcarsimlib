@@ -54,14 +54,11 @@ int main(int argc, char** argv) {
     double total_sim_time = 10.0; // [sec]
     double sim_step_delta_sec = 0.01; // [sec]
 
-    // activate when you want to test whole simulation at once
-    // cm->RunAll();
-
     // simulation loop
     while( (cm->IsRunning()) && (!interrupt) && (current_sim_time < total_sim_time) )
     {
-        // annouce 1. simulation time, 2. latest carsim input, 3. latest carsim output.
-        cm->EchoInfo();
+        // activate if necessary. variables to show are 1. simulation time, 2. latest carsim input, 3. latest carsim output.
+        // cm->EchoInfo();
         /* Format : 
         [INFO] ### t = 0.01 [sec] ###
                Control Inputs : 
@@ -81,17 +78,22 @@ int main(int argc, char** argv) {
 
         // get updated observation outputs
         carsim_output = cm->GetCarsimStateOutput();
+        std::cout << "### Carsim states at t = " << current_sim_time << " [sec] ###" << std::endl
+                  << "(X, Y, Yaw) = ( "
+                  << carsim_output["XCG_TM"] << ", "
+                  << carsim_output["YCG_TM"] << ", "
+                  << carsim_output["YAW"] << ") " << std::endl;
 
         // set next control inputs
         carsim_input["IMP_STEER_SW"] = 1.0 * std::sin(current_sim_time); // [rad]
 
         if(current_sim_time < total_sim_time/2){
-            // first half
+            // first half : press the throttle pedal.
             carsim_input["IMP_THROTTLE_ENGINE"] = 10; // [-]
             carsim_input["IMP_FBK_PDL"] = 0.0; //[-]
         }else{
-            // second half
-            carsim_input["IMP_THROTTLE_ENGINE"] = 10; // [-]
+            // second half : press the brake pedal.
+            carsim_input["IMP_THROTTLE_ENGINE"] = 0; // [-]
             carsim_input["IMP_FBK_PDL"] = 500; //[-]
         }
         cm->SetCarsimControlInput(carsim_input);
@@ -102,39 +104,4 @@ int main(int argc, char** argv) {
 
     // return normal termination flag
     return 0;
-
-    /*
-    // initialize carsim solver
-    carsim->run_init_step();
-
-    // instance get observed info from carsim
-    InfoFromCarsim* output = new InfoFromCarsim();
-    // instance to set control input for carsim
-    InfoToCarsim* operate = new InfoToCarsim();
-
-    // initialize simulation time.
-    double carsim_time = 0.0;
-
-    // simulation loop : press Ctrl+C to interrupt.
-    while (carsim->is_continuing() && !interrupt) {
-        operate->IMP_THROTTLE_ENGINE = 0.2; 
-        operate->IMP_FBK_PDL = 0.0; 
-        operate->IMP_STEER_SW = 0.01 / 0.060039;
-        carsim->SetState(operate);
-        carsim->run_integrate(); // 更新時間を入れる.
-        carsim_time = carsim->carsim_t;
-        output = carsim->GetState();
-        // printf("t = %f \n", carsim_time);
-        printf("Vehicle States : \n");
-        printf("(X, Y, Yaw) = (%f, %f, %f) \n", output->XCG_TM, output->YCG_TM, output->YAW);
-        printf("(Vx, Vy, Yaw_rate, Ax, Ay) = (%f, %f, %f, %f, %f) \n", output->VX, output->VY, output->AVZ);
-        printf("Control Inputs : \n");
-        printf("(throttle, brake, steer) = (%f, %f, %f)", operate->IMP_THROTTLE_ENGINE, operate->IMP_FBK_PDL, operate->IMP_STEER_SW);
-    }
-
-    // normal termination process
-    printf("\nClosing Carsim...\n");
-    carsim->ReleaseCarsim();
-    return 0;
-    */
 }
