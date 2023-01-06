@@ -6,12 +6,15 @@
 CarsimManager::CarsimManager(std::string simfile_path)
 {
     std::cout << "[INFO] Constructor of CarsimManager" << std::endl;
-    std::cout << "[INFO] simfile_path = " << simfile_path << std::endl;
+    std::cout << "       simfile_path = " << simfile_path << std::endl;
 
     // instantiate CarsimCoreAPI
     api_ = new CarsimCoreAPI(simfile_path);
+
+    // save simfile path as a class member
     simfile_path_ = simfile_path;
 
+    // launch carsim solver
     LaunchCarsimSolver();
 }
 
@@ -30,30 +33,16 @@ int CarsimManager::LaunchCarsimSolver()
 
     // open carsim dll
     if(OpenDLL()){
-        std::cout << "[INFO] OpenDLL unsuccessful." << std::endl;
+        std::cout << "[ERROR] OpenDLL failed." << std::endl;
         return 1;
     }else{
         std::cout << "[INFO] OpenDLL successful." << std::endl;
     }
 
-    std::cout << "[INFO] start RunAll for debug" << std::endl;
-    // initialize carsim solver
-    vs_real t = api_->vs_setdef_and_read(simfile_path_.c_str(), NULL, NULL);
-    api_->vs_initialize(t, NULL, NULL);
+    // set output_message pointer. refer carsim msg by "sPringMsg()"
+    sMsg_ = api_->vs_get_output_message();
 
-    int _ibarg = 0;
-
-    // Run. Each loop advances time one step
-    while (!api_->vs_stop_run()) {
-        api_->vs_integrate (&t, NULL);
-        api_->vs_bar_graph_update (&_ibarg); // update bar graph?
-    }
-
-    // Terminate
-    api_->vs_terminate (t, NULL);
-
-    std::cout << "[INFO] end RunAll for debug" << std::endl;
-
+    return 0;
 }
 
 // open carsim dll
@@ -69,15 +58,21 @@ int CarsimManager::OpenDLL()
 
 	// CarsimBasic
 	std::cout << "       pathDLL = " << _pathDLL << std::endl;
-
 	vsDLL_ = api_->vs_load_library(_pathDLL);
+    if (vsDLL_ == NULL)
+    {
+    printf("[ERROR] vs_load_library failed. \n");
+    return 1;
+    }else{
+        printf("       vs_load_library successful. \n");
+    }
 
     // get API functions
 	if (api_->vs_get_api(vsDLL_, _pathDLL)){
-		printf("       vs_get_api unsuccessful\n");
+		printf("[ERROR] vs_get_api failed. \n");
 		return 1;
 	}else{
-		printf("       vs_get_api successful\n");
+		printf("       vs_get_api successful. \n");
         return 0;
 	}
 }
@@ -86,6 +81,7 @@ int CarsimManager::OpenDLL()
 void CarsimManager::CloseCarsimSolver()
 {
     std::cout << "[INFO] CloseCarsimSolver" << std::endl;
+    api_->vs_terminate (carsim_time_, NULL);
     ReleaseDLL();
 }
 
@@ -93,6 +89,7 @@ void CarsimManager::CloseCarsimSolver()
 void CarsimManager::ReleaseDLL()
 {
     std::cout << "[INFO] ReleaseDLL" << std::endl;
+    api_->vs_free_library(vsDLL_);
 }
 
 // define control inputs
@@ -122,14 +119,32 @@ void CarsimManager::GetCarsimStateOutput()
 int CarsimManager::Reset()
 {
     std::cout << "[INFO] Reset" << std::endl;
-    // return execution status
+
+    // initialize carsim solver
+    carsim_time_ = api_->vs_setdef_and_read(simfile_path_.c_str(), NULL, NULL);
+    if (api_->vs_error_occurred()) {
+        std::cout << "[ERROR] Error occurred reading simfile " << simfile_path_ << std::endl;
+        return 1;
+    }
+
+    api_->vs_initialize(carsim_time_, NULL, NULL);
+    sPrintMsg();
+
+    return 0;
 }
 
 // run all simulation steps at once
-int CarsimManager::RunAll()
+void CarsimManager::RunAll()
 {
     std::cout << "[INFO] RunAll" << std::endl;
-    // return execution status
+
+    // run. Each loop advances time one step
+    while (!api_->vs_stop_run()) {
+        api_->vs_integrate (&carsim_time_, NULL);
+        api_->vs_bar_graph_update (&ibarg_); // update bar graph?
+    }
+
+    std::cout << std::endl;
 }
 
 // update carsim state for a certain time
@@ -142,12 +157,25 @@ int CarsimManager::RunStep(double delta_time_milliseconds)
 // is carsim running now?
 int CarsimManager::IsRunning()
 {
-    std::cout << "[INFO] IsRunning" << std::endl;
-    // return execution status
-    return 1; // for debug
+    std::cout << "[INFO] IsRunning : " << !api_->vs_stop_run() << std::endl;
+    return !api_->vs_stop_run();
 }
 
 // echo time and carsim inputs/states
 void CarsimManager::EchoInfo(){
     std::cout << "[INFO] ### t = ..." << std::endl;
+}
+
+// echo carsim message
+void CarsimManager::sPrintMsg () {
+    std::cout << "[INFO] start sPrintMsg" << std::endl;
+
+    // exit if no valid message is given.
+    if (!*sMsg_){return;} 
+
+    // print msg
+    std::cout << "[INFO] [CarsimMsg]" << std::endl << std::endl << sMsg_ << std::endl;
+    // printf ("%s",sMsg_);
+    *sMsg_ = 0;
+    std::cout << "[INFO] end sPrintMsg" << std::endl;
 }

@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     double sim_step_delta_sec = 0.1; // [sec]
 
     // activate when you want to test whole simulation at once
-    // cm->RunAll();
+    cm->RunAll();
 
     // simulation loop
     while( (cm->IsRunning()) && (!interrupt) && (current_sim_time < total_sim_time) )

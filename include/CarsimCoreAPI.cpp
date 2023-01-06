@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include <string>
-
 #include "vs_deftypes.h" // VS types and definitions
 // #include "vs_api_road.h"
 #include "CarsimCoreAPI.hpp"
@@ -53,14 +52,12 @@ int CarsimCoreAPI::sPrintfError(const char *format, ...) {
 // constructor
 CarsimCoreAPI::CarsimCoreAPI(std::string simfile_path)
 {
-
-    std::cout << "[INFO] Constructor of CarsimManager" << std::endl;
-
+    //
 }
 
 // destructor
 CarsimCoreAPI::~CarsimCoreAPI(){
-    // write something
+    //
 }
 
 void CarsimCoreAPI::vs_set_error_message_function (int(*errorMsgFunc) (const char *format, ...)) {
