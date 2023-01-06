@@ -1,5 +1,6 @@
 #include <map>
 #include <string>
+#include <vector>
 #include "CarsimCoreAPI.hpp"
 #include "vs_deftypes.h" // import vs_real definition
 
@@ -27,8 +28,13 @@ Class to launch, run, update states, and close carsim solver.
 		int ibarg_ = 0;
 		char *sMsg_ = 0; // pointer to support local sPringMsg function
 		vs_real carsim_time_ = 0.0f; // [sec]
+		vs_real carsim_tstep_ = 0.0f; // [sec]
 
 	public:
+
+		// for debug
+		double* debug_steer_input;
+
 		// constructor
 		CarsimManager(std::string fn);
 		// destructor
@@ -44,9 +50,9 @@ Class to launch, run, update states, and close carsim solver.
 		void ReleaseDLL();
 
 		// define control inputs
-		void DefineCarsimControlInput();
+		void DefineCarsimControlInput(std::map<std::string, vs_real> carsim_input);
 		// define carsim state outputs
-		void DefineCarsimStateOutput();
+		void DefineCarsimStateOutput(std::vector<std::string> carsim_output_keys);
 
 		// reset
 		int Reset();
@@ -57,7 +63,7 @@ Class to launch, run, update states, and close carsim solver.
 		// set next control action to carsim
 		void SetCarsimControlInput();
 		// get carsim state
-		void GetCarsimStateOutput();
+		std::map<std::string, vs_real> GetCarsimStateOutput();
 		// is carsim running now?
 		int IsRunning();
 

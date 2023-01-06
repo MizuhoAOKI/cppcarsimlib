@@ -1,6 +1,6 @@
 ﻿// sample program to run a carsim solver from a cpp program.
 #include <signal.h>
-#include <vector>
+#include <iostream>
 #include "CarsimManager.hpp"
 
 // [CHANGE HERE] set simfile.sim location on your environment.
@@ -19,6 +19,9 @@ int main(int argc, char** argv) {
 
     // get carsim manager with solver initialization process
     CarsimManager* cm = new CarsimManager(std::string(SIMFILE_PATH));
+
+    // reset carsim-time of the target solver instance
+    cm->Reset();
 
     // define and initialize input/output variables
     //// inputs
@@ -41,11 +44,8 @@ int main(int argc, char** argv) {
         "AY"   // [m/s^2]
     };
 
-    cm->DefineCarsimControlInput();
-    cm->DefineCarsimStateOutput();
-
-    // reset carsim-time of the target solver instance
-    cm->Reset();
+    cm->DefineCarsimControlInput(carsim_input);
+    cm->DefineCarsimStateOutput(carsim_output_keys);
 
     // prepare simulation params
     double current_sim_time = 0.0; // [sec]
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     double sim_step_delta_sec = 0.1; // [sec]
 
     // activate when you want to test whole simulation at once
-    cm->RunAll();
+    // cm->RunAll();
 
     // simulation loop
     while( (cm->IsRunning()) && (!interrupt) && (current_sim_time < total_sim_time) )
@@ -78,13 +78,12 @@ int main(int argc, char** argv) {
         current_sim_time += sim_step_delta_sec;
 
         // get updated observation outputs
-        cm->GetCarsimStateOutput();
+        carsim_output = cm->GetCarsimStateOutput();
 
         // set next control inputs
         cm->SetCarsimControlInput();
-
     }
-    
+
     // close carsim solver normally
     cm->CloseCarsimSolver();
 
