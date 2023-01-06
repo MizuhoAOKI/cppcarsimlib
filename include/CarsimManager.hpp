@@ -1,7 +1,15 @@
 #include <map>
 #include <string>
-// #include "CarsimCoreAPI.hpp"
+#include "CarsimCoreAPI.hpp"
 #include "vs_deftypes.h" // import vs_real definition
+
+// ENC = External Naming Convention
+#if (defined(_WIN32) || defined(_WIN64))
+// windows
+#else
+// linux
+#define HMODULE void*
+#endif
 
 class CarsimManager
 {
@@ -10,7 +18,9 @@ Class to launch, run, update states, and close carsim solver.
 */
 	private:
 		// carsim api instance
-		// CarsimCoreAPI *api_;
+		CarsimCoreAPI *api_;
+		HMODULE vsDLL_;
+		std::string simfile_path_;
 		std::map<std::string, vs_real*> input_variable_map_;
 		std::map<std::string, vs_real*> output_variable_map_;
 
@@ -21,7 +31,7 @@ Class to launch, run, update states, and close carsim solver.
 		~CarsimManager();
 
 		// launch carsim
-		void LaunchCarsimSolver();
+		int LaunchCarsimSolver();
 		// open carsim dll
 		int OpenDLL();
 		// close carsim

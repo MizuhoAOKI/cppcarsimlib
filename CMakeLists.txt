@@ -8,19 +8,19 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # build libraries
-add_library(vs_api SHARED ${CMAKE_CURRENT_SOURCE_DIR}/include/vs_get_api.c)
-# add_library(carsimlib SHARED ${CMAKE_CURRENT_SOURCE_DIR}/include/CarsimLib.cpp)
-add_library(carsimlib SHARED ${CMAKE_CURRENT_SOURCE_DIR}/include/CarsimManager.cpp)
+# add_library(vs_api SHARED ${CMAKE_CURRENT_SOURCE_DIR}/include/vs_get_api.c)
+# add_library(carsim_api SHARED ${CMAKE_CURRENT_SOURCE_DIR}/include/CarsimCoreAPI.cpp)
+add_library(carsim_lib SHARED ${CMAKE_CURRENT_SOURCE_DIR}/include/CarsimCoreAPI.cpp ${CMAKE_CURRENT_SOURCE_DIR}/include/CarsimManager.cpp)
 
 # link libraries as "carsimlib"
-target_link_libraries(carsimlib vs_api)
+# target_link_libraries(carsim_lib vs_api)
 
 # build sample program
 add_executable(samplerun ${CMAKE_CURRENT_SOURCE_DIR}/src/samplerun.cpp)
 
 # for debug
-add_executable(runall ${CMAKE_CURRENT_SOURCE_DIR}/src/runall.cpp)
-target_link_libraries(runall vs_api)
+# add_executable(runall ${CMAKE_CURRENT_SOURCE_DIR}/src/runall.cpp)
+# target_link_libraries(runall vs_api)
 
 # link carsimlib to the sample program
-target_link_libraries(samplerun carsimlib)
+target_link_libraries(samplerun carsim_lib)

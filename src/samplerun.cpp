@@ -1,6 +1,6 @@
 ﻿// sample program to run a carsim solver from a cpp program.
 #include <signal.h>
-#include "vs_deftypes.h"
+#include <vector>
 #include "CarsimManager.hpp"
 
 // [CHANGE HERE] set simfile.sim location on your environment.
@@ -19,6 +19,30 @@ int main(int argc, char** argv) {
 
     // get carsim manager with solver initialization process
     CarsimManager* cm = new CarsimManager(std::string(SIMFILE_PATH));
+
+    // define and initialize input/output variables
+    //// inputs
+    std::map<std::string, vs_real> carsim_input;
+    carsim_input["IMP_STEER_SW"] = 0.0; // [rad]
+    carsim_input["IMP_FBK_PDL"] = 0.0; // [-]
+    carsim_input["IMP_THROTTLE_ENGINE"] = 0.0; // [-]
+
+    //// outputs
+    std::map<std::string, vs_real> carsim_output;
+    std::vector<std::string> carsim_output_keys = {
+        "XCG_TM", // [m]
+        "YCG_TM", // [m]
+        "YAW", // [rad]
+        "VX",  // [m/s]
+        "VY",  // [m/s]
+        "VZ",  // [m/s]
+        "AVZ", // [rad/s]
+        "AX",  // [m/s^2]
+        "AY"   // [m/s^2]
+    };
+
+    cm->DefineCarsimControlInput();
+    cm->DefineCarsimStateOutput();
 
     // reset carsim-time of the target solver instance
     cm->Reset();
@@ -39,13 +63,13 @@ int main(int argc, char** argv) {
         /* Format : 
         [INFO] ### t = 0.01 [sec] ###
                Control Inputs : 
-                 IMP_STEER_SW = 0.0 [rad]
-                 IMP_FBK_PDL = 0.0 [-]
-                 IMP_THROTTLE_ENGINE = 0.0 [-]
+                 IMP_STEER_SW = 0.0
+                 IMP_FBK_PDL = 0.0
+                 IMP_THROTTLE_ENGINE = 0.0
                Observations : 
-                 XCG_TM = 0.0 [m]
-                 YCG_TM = 0.0 [m]
-                 YAW = 0.0 [rad]
+                 XCG_TM = 0.0
+                 YCG_TM = 0.0
+                 YAW = 0.0
                  ...
         */
 
