@@ -265,98 +265,97 @@ int CarsimCoreAPI::sPrintErrorNoDll (const char *where, const char *dll_name) {
 }
 
 // Helper function to get road API from a particular source function.
-int CarsimCoreAPI::sGetApiRoad(HMODULE dll, const char *dname, char *me) {
+int CarsimCoreAPI::sGetApiRoad(HMODULE dll, const char *dname, const char *me) {
   if (dll == NULL) return sPrintErrorNoDll(me, dname);
 
-// TODO
-//   // 2D reference path properties (chapter 7)
-//   if (sGetApi(&vs_get_road_start_stop, dll, "vs_get_road_start_stop", dname, me)) return -2;
-//   if (sGetApi(&vs_path_curv_i, dll, "vs_path_curv_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_curv_i, dll, "vs_road_curv_i", dname, me)) return -2;
-//   if (sGetApi(&vs_path_l_i, dll, "vs_path_l_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_l, dll, "vs_road_l", dname, me)) return -2;
-//   if (sGetApi(&vs_road_l_i, dll, "vs_road_l_i", dname, me)) return -2;
-//   if (sGetApi(&vs_path_s_i, dll, "vs_path_s_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_s, dll, "vs_road_s", dname, me)) return -2;
-//   if (sGetApi(&vs_road_s_i, dll, "vs_road_s_i", dname, me)) return -2;
-//   if (sGetApi(&vs_path_x_i, dll, "vs_path_x_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_x, dll, "vs_road_x", dname, me)) return -2;
-//   if (sGetApi(&vs_road_x_i, dll, "vs_road_x_i", dname, me)) return -2;
-//   if (sGetApi(&vs_path_x_sl_i, dll, "vs_path_x_sl_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_x_sl_i, dll, "vs_road_x_sl_i", dname, me)) return -2;
-//   if (sGetApi(&vs_path_y_i, dll, "vs_path_y_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_y, dll, "vs_road_y", dname, me)) return -2;
-//   if (sGetApi(&vs_road_y_i, dll, "vs_road_y_i", dname, me)) return -2;
-//   if (sGetApi(&vs_path_y_sl_i, dll, "vs_path_y_sl_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_y_sl_i, dll, "vs_road_y_sl_i", dname, me)) return -2;
-//   if (sGetApi(&vs_path_yaw_i, dll, "vs_path_yaw_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_yaw, dll, "vs_road_yaw", dname, me)) return -2;
-//   if (sGetApi(&vs_road_yaw_i, dll, "vs_road_yaw_i", dname, me)) return -2;
-//   if (sGetApi(&vs_s_loop, dll, "vs_s_loop", dname, me)) return -2;
-//   if (sGetApi(&vs_s_loop_i, dll, "vs_s_loop_i", dname, me)) return -2;
-//   if (sGetApi(&vs_s_path_loop, dll, "vs_s_path_loop", dname, me)) return -2;
-//   if (sGetApi(&vs_target_heading, dll, "vs_target_heading", dname, me)) return -2;
-//   if (sGetApi(&vs_target_l, dll, "vs_target_l", dname, me)) return -2;
+  // 2D reference path properties (chapter 7)
+  if (sGetApi(&vs_get_road_start_stop, dll, "vs_get_road_start_stop", dname, me)) return -2;
+  if (sGetApi(&vs_path_curv_i, dll, "vs_path_curv_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_curv_i, dll, "vs_road_curv_i", dname, me)) return -2;
+  if (sGetApi(&vs_path_l_i, dll, "vs_path_l_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_l, dll, "vs_road_l", dname, me)) return -2;
+  if (sGetApi(&vs_road_l_i, dll, "vs_road_l_i", dname, me)) return -2;
+  if (sGetApi(&vs_path_s_i, dll, "vs_path_s_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_s, dll, "vs_road_s", dname, me)) return -2;
+  if (sGetApi(&vs_road_s_i, dll, "vs_road_s_i", dname, me)) return -2;
+  if (sGetApi(&vs_path_x_i, dll, "vs_path_x_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_x, dll, "vs_road_x", dname, me)) return -2;
+  if (sGetApi(&vs_road_x_i, dll, "vs_road_x_i", dname, me)) return -2;
+  if (sGetApi(&vs_path_x_sl_i, dll, "vs_path_x_sl_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_x_sl_i, dll, "vs_road_x_sl_i", dname, me)) return -2;
+  if (sGetApi(&vs_path_y_i, dll, "vs_path_y_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_y, dll, "vs_road_y", dname, me)) return -2;
+  if (sGetApi(&vs_road_y_i, dll, "vs_road_y_i", dname, me)) return -2;
+  if (sGetApi(&vs_path_y_sl_i, dll, "vs_path_y_sl_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_y_sl_i, dll, "vs_road_y_sl_i", dname, me)) return -2;
+  if (sGetApi(&vs_path_yaw_i, dll, "vs_path_yaw_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_yaw, dll, "vs_road_yaw", dname, me)) return -2;
+  if (sGetApi(&vs_road_yaw_i, dll, "vs_road_yaw_i", dname, me)) return -2;
+  if (sGetApi(&vs_s_loop, dll, "vs_s_loop", dname, me)) return -2;
+  if (sGetApi(&vs_s_loop_i, dll, "vs_s_loop_i", dname, me)) return -2;
+  if (sGetApi(&vs_s_path_loop, dll, "vs_s_path_loop", dname, me)) return -2;
+  if (sGetApi(&vs_target_heading, dll, "vs_target_heading", dname, me)) return -2;
+  if (sGetApi(&vs_target_l, dll, "vs_target_l", dname, me)) return -2;
 
-//   if (sGetApi(&vs_get_path_xy, dll, "vs_get_path_xy", dname, me)) return -2;
-//   if (sGetApi(&vs_get_road_xy, dll, "vs_get_road_xy", dname, me)) return -2;
+  if (sGetApi(&vs_get_path_xy, dll, "vs_get_path_xy", dname, me)) return -2;
+  if (sGetApi(&vs_get_road_xy, dll, "vs_get_road_xy", dname, me)) return -2;
 
-//   // 3D properties of current road (chapter 7)
-//   if (sGetApi(&vs_get_dzds_dzdl, dll, "vs_get_dzds_dzdl", dname, me)) return -2;
-//   if (sGetApi(&vs_get_dzds_dzdl_i, dll, "vs_get_dzds_dzdl_i", dname, me)) return -2;
-//   if (sGetApi(&vs_get_road_contact, dll, "vs_get_road_contact", dname, me)) return -2;
-//   if (sGetApi(&vs_get_road_contact_sl, dll, "vs_get_road_contact_sl", dname, me)) return -2;
-//   if (sGetApi(&vs_get_road_xyz, dll, "vs_get_road_xyz", dname, me)) return -2;
-//   if (sGetApi(&vs_road_pitch_sl_i, dll, "vs_road_pitch_sl_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_roll_sl_i, dll, "vs_road_roll_sl_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_z, dll, "vs_road_z", dname, me)) return -2;
-//   if (sGetApi(&vs_road_z_2, dll, "vs_road_z_2", dname, me)) return -2;
-//   if (sGetApi(&vs_road_z_i, dll, "vs_road_z_i", dname, me)) return -2;
-//   if (sGetApi(&vs_road_z_sl_i, dll, "vs_road_z_sl_i", dname, me)) return -2;
+  // 3D properties of current road (chapter 7)
+  if (sGetApi(&vs_get_dzds_dzdl, dll, "vs_get_dzds_dzdl", dname, me)) return -2;
+  if (sGetApi(&vs_get_dzds_dzdl_i, dll, "vs_get_dzds_dzdl_i", dname, me)) return -2;
+  if (sGetApi(&vs_get_road_contact, dll, "vs_get_road_contact", dname, me)) return -2;
+  if (sGetApi(&vs_get_road_contact_sl, dll, "vs_get_road_contact_sl", dname, me)) return -2;
+  if (sGetApi(&vs_get_road_xyz, dll, "vs_get_road_xyz", dname, me)) return -2;
+  if (sGetApi(&vs_road_pitch_sl_i, dll, "vs_road_pitch_sl_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_roll_sl_i, dll, "vs_road_roll_sl_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_z, dll, "vs_road_z", dname, me)) return -2;
+  if (sGetApi(&vs_road_z_2, dll, "vs_road_z_2", dname, me)) return -2;
+  if (sGetApi(&vs_road_z_i, dll, "vs_road_z_i", dname, me)) return -2;
+  if (sGetApi(&vs_road_z_sl_i, dll, "vs_road_z_sl_i", dname, me)) return -2;
 
-//   // Functions the make use of user ID for paths (chapter 7)
-//   if (sGetApi(&vs_path_sstart_id, dll, "vs_path_sstart_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_sstop_id, dll, "vs_path_sstop_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_length_id, dll, "vs_path_length_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_is_looped_id, dll, "vs_path_is_looped_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_s_id, dll, "vs_path_s_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_l_id, dll, "vs_path_l_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_x_id, dll, "vs_path_x_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_y_id, dll, "vs_path_y_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_dxds_id, dll, "vs_path_dxds_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_dyds_id, dll, "vs_path_dyds_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_dxdl_id, dll, "vs_path_dxdl_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_dydl_id, dll, "vs_path_dydl_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_curv_id, dll, "vs_path_curv_id", dname, me)) return -2;
-//   if (sGetApi(&vs_path_yaw_id, dll, "vs_path_yaw_id", dname, me)) return -2;
+  // Functions the make use of user ID for paths (chapter 7)
+  if (sGetApi(&vs_path_sstart_id, dll, "vs_path_sstart_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_sstop_id, dll, "vs_path_sstop_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_length_id, dll, "vs_path_length_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_is_looped_id, dll, "vs_path_is_looped_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_s_id, dll, "vs_path_s_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_l_id, dll, "vs_path_l_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_x_id, dll, "vs_path_x_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_y_id, dll, "vs_path_y_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_dxds_id, dll, "vs_path_dxds_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_dyds_id, dll, "vs_path_dyds_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_dxdl_id, dll, "vs_path_dxdl_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_dydl_id, dll, "vs_path_dydl_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_curv_id, dll, "vs_path_curv_id", dname, me)) return -2;
+  if (sGetApi(&vs_path_yaw_id, dll, "vs_path_yaw_id", dname, me)) return -2;
 
-//   // Functions that make use of user ID for roads (chapter 7)
-//   if (sGetApi(&vs_road_sstart_id, dll, "vs_road_sstart_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_sstop_id, dll, "vs_road_sstop_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_length_id, dll, "vs_road_length_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_is_looped_id, dll, "vs_road_is_looped_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_s_id, dll, "vs_road_s_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_l_id, dll, "vs_road_l_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_x_id, dll, "vs_road_x_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_y_id, dll, "vs_road_y_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_dxds_id, dll, "vs_road_dxds_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_dyds_id, dll, "vs_road_dyds_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_dxdl_id, dll, "vs_road_dxdl_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_dydl_id, dll, "vs_road_dydl_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_curv_id, dll, "vs_road_curv_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_z_id, dll, "vs_road_z_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_dzds_id, dll, "vs_road_dzds_id", dname, me)) return -2;
-//   if (sGetApi(&vs_road_dzdl_id, dll, "vs_road_dzdl_id", dname, me)) return -2;
+  // Functions that make use of user ID for roads (chapter 7)
+  if (sGetApi(&vs_road_sstart_id, dll, "vs_road_sstart_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_sstop_id, dll, "vs_road_sstop_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_length_id, dll, "vs_road_length_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_is_looped_id, dll, "vs_road_is_looped_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_s_id, dll, "vs_road_s_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_l_id, dll, "vs_road_l_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_x_id, dll, "vs_road_x_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_y_id, dll, "vs_road_y_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_dxds_id, dll, "vs_road_dxds_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_dyds_id, dll, "vs_road_dyds_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_dxdl_id, dll, "vs_road_dxdl_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_dydl_id, dll, "vs_road_dydl_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_curv_id, dll, "vs_road_curv_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_z_id, dll, "vs_road_z_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_dzds_id, dll, "vs_road_dzds_id", dname, me)) return -2;
+  if (sGetApi(&vs_road_dzdl_id, dll, "vs_road_dzdl_id", dname, me)) return -2;
 
-//   if (sGetApi(&vs_road_read, dll, "vs_road_read", dname, me)) return -2;
-//   if (sGetApi(&vs_road_generate_path_shapes, dll, "vs_road_generate_path_shapes", dname, me)) return -2;
-//   if (sGetApi(&vs_road_generate_road_shapes, dll, "vs_road_generate_road_shapes", dname, me)) return -2;
-//   if (sGetApi(&vs_road_write_animator_par, dll, "vs_road_write_animator_par", dname, me)) return -2;
+  if (sGetApi(&vs_road_read, dll, "vs_road_read", dname, me)) return -2;
+  if (sGetApi(&vs_road_generate_path_shapes, dll, "vs_road_generate_path_shapes", dname, me)) return -2;
+  if (sGetApi(&vs_road_generate_road_shapes, dll, "vs_road_generate_road_shapes", dname, me)) return -2;
+  if (sGetApi(&vs_road_write_animator_par, dll, "vs_road_write_animator_par", dname, me)) return -2;
 
-//   if (sGetApi(&vs_road_install_terrain_function, dll, "vs_road_install_terrain_function", dname, me)) return -2;
+  if (sGetApi(&vs_road_install_terrain_function, dll, "vs_road_install_terrain_function", dname, me)) return -2;
   
-//   if (sGetApi(&vs_copy_inst_from_array, dll, "vs_copy_inst_from_array", dname, me)) return -2;
-//   if (sGetApi(&vs_copy_inst_to_array, dll, "vs_copy_inst_to_array", dname, me)) return -2;
+  if (sGetApi(&vs_copy_inst_from_array, dll, "vs_copy_inst_from_array", dname, me)) return -2;
+  if (sGetApi(&vs_copy_inst_to_array, dll, "vs_copy_inst_to_array", dname, me)) return -2;
 
   return 0;
 }
@@ -365,7 +364,7 @@ int CarsimCoreAPI::sGetApiRoad(HMODULE dll, const char *dname, char *me) {
    Get all VS API functions declared in "vs_api.h"
 ---------------------------------------------------------------------------- */
 int CarsimCoreAPI::vs_get_api (HMODULE dll, const char *dname) {
-  char *me = "vs_get_api";
+  const char *me = "vs_get_api";
   if (dll == NULL) return sPrintErrorNoDll(me, dname);
 
   // basic run functions (chapter 2)
@@ -573,7 +572,7 @@ int CarsimCoreAPI::vs_get_api (HMODULE dll, const char *dname) {
    Legacy get functions for subsets of the API functions.
 ---------------------------------------------------------------------------- */
 int CarsimCoreAPI::vs_get_api_basic (HMODULE dll, const char *dname) {
-  char *me = "vs_get_api_basic";
+  const char *me = "vs_get_api_basic";
   if (dll == NULL) return sPrintErrorNoDll(me, dname);
 
   if (sGetApi(&vs_bar_graph_update, dll, "vs_bar_graph_update", dname, me)) return -2;
@@ -602,7 +601,7 @@ int CarsimCoreAPI::vs_get_api_basic (HMODULE dll, const char *dname) {
 
 
 int CarsimCoreAPI::vs_get_api_extend (HMODULE dll, const char *dname) {
-  char *me = "vs_get_api_extend";
+  const char *me = "vs_get_api_extend";
   if (dll == NULL) return sPrintErrorNoDll(me, dname);
 
   if (sGetApi(&vs_define_import, dll, "vs_define_import", dname, me)) return -2;
@@ -641,7 +640,7 @@ int CarsimCoreAPI::vs_get_api_road (HMODULE dll, const char *dname) {
 }
 
 int CarsimCoreAPI::vs_get_api_install_external (HMODULE dll, const char *dname) {
-  char *me = "vs_get_api_install_external";
+  const char *me = "vs_get_api_install_external";
   if (dll == NULL) return sPrintErrorNoDll(me, dname);
 
   if (sGetApi(&vs_run, dll, "vs_run", dname, me)) return -2;
