@@ -1,6 +1,7 @@
 ﻿// sample program to run a carsim solver from a cpp program.
 #include <signal.h>
 #include <iostream>
+#include <cmath>
 #include "CarsimManager.hpp"
 
 // [CHANGE HERE] set simfile.sim location on your environment.
@@ -25,10 +26,11 @@ int main(int argc, char** argv) {
 
     // define and initialize input/output variables
     //// inputs
-    std::map<std::string, vs_real> carsim_input;
-    carsim_input["IMP_STEER_SW"] = 0.0; // [rad]
-    carsim_input["IMP_FBK_PDL"] = 0.0; // [-]
-    carsim_input["IMP_THROTTLE_ENGINE"] = 0.0; // [-]
+    std::map<std::string, vs_real> carsim_input{
+        {"IMP_STEER_SW",0.0}, // [rad]
+        {"IMP_FBK_PDL",0.0}, // [-]
+        {"IMP_THROTTLE_ENGINE",0.0} // [-]
+    };
 
     //// outputs
     std::map<std::string, vs_real> carsim_output;
@@ -49,8 +51,8 @@ int main(int argc, char** argv) {
 
     // prepare simulation params
     double current_sim_time = 0.0; // [sec]
-    double total_sim_time = 1.0; // [sec]
-    double sim_step_delta_sec = 0.1; // [sec]
+    double total_sim_time = 10.0; // [sec]
+    double sim_step_delta_sec = 0.01; // [sec]
 
     // activate when you want to test whole simulation at once
     // cm->RunAll();
@@ -81,7 +83,18 @@ int main(int argc, char** argv) {
         carsim_output = cm->GetCarsimStateOutput();
 
         // set next control inputs
-        cm->SetCarsimControlInput();
+        carsim_input["IMP_STEER_SW"] = 1.0 * std::sin(current_sim_time); // [rad]
+
+        if(current_sim_time < total_sim_time/2){
+            // first half
+            carsim_input["IMP_THROTTLE_ENGINE"] = 10; // [-]
+            carsim_input["IMP_FBK_PDL"] = 0.0; //[-]
+        }else{
+            // second half
+            carsim_input["IMP_THROTTLE_ENGINE"] = 10; // [-]
+            carsim_input["IMP_FBK_PDL"] = 500; //[-]
+        }
+        cm->SetCarsimControlInput(carsim_input);
     }
 
     // close carsim solver normally

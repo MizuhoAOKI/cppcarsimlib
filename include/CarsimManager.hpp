@@ -61,7 +61,7 @@ Class to launch, run, update states, and close carsim solver.
 		// update carsim state for a certain time
 		int RunStep(double delta_time_milliseconds);
 		// set next control action to carsim
-		void SetCarsimControlInput();
+		void SetCarsimControlInput(std::map<std::string, vs_real> carsim_input);
 		// get carsim state
 		std::map<std::string, vs_real> GetCarsimStateOutput();
 		// is carsim running now?

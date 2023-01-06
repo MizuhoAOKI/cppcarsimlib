@@ -101,9 +101,16 @@ void CarsimManager::DefineCarsimControlInput(std::map<std::string, vs_real> cars
 
     // api_->vs_statement("IMP_STEER_SW", "VS_REPLACE", 3.0); // TODO : kentou
     // std::cout << "[DEBUG] " << const_cast<char*>("IMP_STEER_SW") << std::endl;
-    debug_steer_input = api_->vs_get_var_ptr(const_cast<char*>("IMP_STEER_SW"));
-    api_->vs_statement("IMPORT", "IMP_STEER_SW vs_replace", 1);
-    // api_->vs_get_var_ptr(const_cast<char*>("IMP_FBK_PDL"));
+    // debug_steer_input = api_->vs_get_var_ptr(const_cast<char*>("IMP_STEER_SW"));
+    // api_->vs_statement("IMPORT", "IMP_STEER_SW vs_replace", 1);
+
+    for (auto iter = carsim_input.begin(); iter != carsim_input.end(); ++iter){
+        char *_buf = new char[(iter->first).length() + 1];
+        strcpy(_buf, (iter->first).c_str());
+        input_variable_map_[iter->first] = api_->vs_get_var_ptr(_buf);
+        std::cout << "       Add input key : " << iter->first << std::endl;
+        api_->vs_statement("IMPORT", (iter->first + std::string(" vs_replace")).c_str(), 1);
+    }
 }
 
 // define carsim state outputs
@@ -120,10 +127,15 @@ void CarsimManager::DefineCarsimStateOutput(std::vector<std::string> carsim_outp
 }
 
 // set next control action to carsim
-void CarsimManager::SetCarsimControlInput()
+void CarsimManager::SetCarsimControlInput(std::map<std::string, vs_real> carsim_input)
 {
     std::cout << "[INFO] SetCarsimControlInput" << std::endl;
-    *debug_steer_input = 1.0f;
+
+    for (auto iter = carsim_input.begin(); iter != carsim_input.end(); ++iter){
+        *input_variable_map_[iter->first] = iter->second;
+        std::cout << "       " << iter->first << "=" << iter->second << std::endl;
+    }
+
 }
 
 // get carsim state
