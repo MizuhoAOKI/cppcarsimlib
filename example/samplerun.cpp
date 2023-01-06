@@ -1,11 +1,13 @@
 ﻿// sample program to run a carsim solver from a cpp program.
 #include <signal.h>
 #include <iostream>
+#include <filesystem>
 #include <cmath>
 #include "CarsimManager.hpp"
 
-// [CHANGE HERE] set simfile.sim location on your environment.
-#define  SIMFILE_PATH  "C:\\Users\\Public\\Documents\\CarSim2022.1_Data\\simfile.sim"
+// [CHANGE HERE IF NECESSARY] set simfile.sim location on your environment.
+#define  SIMFILE_PATH    "C:\\Users\\Public\\Documents\\CarSim2022.1_Data\\simfile.sim"
+#define  CARSIM_DB_PATH  "C:\\Users\\Public\\Documents\\CarSim2022.1_Data"
 
 // prepare flag for normal termination when Ctrl+C are pressed.
 bool interrupt = false;
@@ -102,6 +104,23 @@ int main(int argc, char** argv) {
     // close carsim solver normally
     cm->CloseCarsimSolver();
 
+    // [Optional] copy latest result to carsim db to visualize results with "Video + Plot" button on the carsim GUI.
+    if(CARSIM_DB_PATH)
+    {
+        std::cout << "[INFO] Copy results to carsim database location" << std::endl;
+        std::filesystem::recursive_directory_iterator e = std::filesystem::recursive_directory_iterator(".\\Results");
+        for (auto f : e) {
+            if(std::filesystem::is_directory(std::filesystem::status(f))){continue;}
+            std::filesystem::path _carsim_db = CARSIM_DB_PATH;
+            auto _source_path = f.path();
+            auto _target_path = _carsim_db.concat(f.path().string().replace(0,1, "")); // remove "."
+            std::cout << "       Copy " << f.path() << " to " << _target_path << std::endl;
+            std::filesystem::remove(_target_path);
+            std::filesystem::copy(std::filesystem::absolute(f), _target_path, std::filesystem::copy_options::overwrite_existing);
+        }
+    }
+
     // return normal termination flag
+    std::cout << "[INFO] Normal termination. " << std::endl;
     return 0;
 }

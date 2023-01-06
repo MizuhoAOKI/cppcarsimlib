@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project( CARSIMLIB )
-set(CMAKE_CXX_FLAGS "-g") # debug mode
-# set(CMAKE_CXX_FLAGS "-O2 -march=native -std=c++11 -Wall") # release mode 
+# set(CMAKE_CXX_FLAGS "-g") # debug mode
+set(CMAKE_CXX_FLAGS "-O2 -march=native -std=c++17 -Wall") # release mode 
 
 # set include dirs
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
